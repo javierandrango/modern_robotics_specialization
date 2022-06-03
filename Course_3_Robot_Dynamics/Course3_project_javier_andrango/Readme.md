@@ -15,13 +15,15 @@ UR5_parameter.py
 ```
 main.py
 ```
-    Open the file in an editor and run the code.
 
-**NOTE**:
+3. Open the file `main.py` in an editor and run the code.
+
+**NOTE**: The code takes several minutes to generate the `.csv` files after running the program
 
 
 ## Screenshots
 
+images here!! or gif file 
 
 ## Mainteiners
 

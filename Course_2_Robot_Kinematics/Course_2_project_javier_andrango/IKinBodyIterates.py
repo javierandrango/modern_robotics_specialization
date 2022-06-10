@@ -109,5 +109,5 @@ def IKinBodyIterates(Blist, M, T, thetalist0, eomg, ev):
     # Create a csv file from joint vector matrix
     # print("joint vector matrix:")
     print(iterate_joints, end='\n\n')
-    np.savetxt('iterates.csv', iterate_joints, delimiter=',', fmt='%f')
+    np.savetxt('csv/iterates.csv', iterate_joints, delimiter=',', fmt='%f')
     return (thetalist, not err)

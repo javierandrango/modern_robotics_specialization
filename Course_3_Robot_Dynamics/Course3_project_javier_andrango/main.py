@@ -26,5 +26,5 @@ print("thetamat1:",thetamat1,end='\n')
 print("thetamat2:",thetamat2,end='\n')
 
 #saved cvs files
-np.savetxt('simulation1.csv', thetamat1, delimiter=',', fmt='%f')
-np.savetxt('simulation2.csv', thetamat2, delimiter=',', fmt='%f')
+np.savetxt('csv/simulation1.csv', thetamat1, delimiter=',', fmt='%f')
+np.savetxt('csv/simulation2.csv', thetamat2, delimiter=',', fmt='%f')

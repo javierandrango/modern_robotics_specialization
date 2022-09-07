@@ -24,5 +24,7 @@ search_tree = np.full((samples_number,3),math.inf) # ID,x,y
 # add first node in search tree
 search_tree[0,:] = nodes[0,:3]
 
-print("search tree: {}".format(search_tree[0,:]))
-print("nearest node: {}".format(nearest_node(search_tree,[1,1])))
+#print("search tree: {}".format(search_tree[0,:]))
+#print("nearest node: {}".format(nearest_node(search_tree,[1,1])))
+
+    

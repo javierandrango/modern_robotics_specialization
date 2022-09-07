@@ -112,52 +112,93 @@ def nearest_node(search_tree, x_samp):
     
     return node
 
-def collision_path(p1, p2, circle):
+# function to return a free path between a line segment and a circle (collision detection)
+def collision_path(A, B, circle,offset=0):
     '''
-        - p1: [x1,y1]
-        - p2: [x2,y2]
-        - circle:[h,k,diameter]
+        - A: [x1,y1] 
+        - B: [x2,y2]
+        - circle:[h,k,diameter] , 
     return:
         - has_collided: true or false
     
     '''
-    # Points A(p1),B(p2),C([h,k]).
-    # A,B line segment points
-    # C circle center
-    radius = circle[2]/2
-    distance_CB = cartesian_distance(p2,circle[:2],3)
-    distance_CA = cartesian_distance(p1,circle[:2],3)
+    # A,B line segment points (x,y)
+    # C circle center (x,y)
+    x1,y1 = A
+    x2,y2 = B
+    xc,yc = circle[:2]
+    radius = circle[2]/2    
     
-    
-    #vectors from the triangle ABC
-    CB = np.subtract(p2,C[:2])
-    AB = np.subtract(p2,p1)
-    
-    CA = np.subtract(p1,C[:2])
-    BA = np.subtract(p1,p2)
+    #general line equation ax+by+c=0, slope m
+    a,b,c,m = [math.inf]*4
+    #projection of C point (xp,yp) into AB line segment
+    xp,yp = [math.inf]*2
 
-    # the dot product between two vectors( two sides of the triangle),
-    # with an angle less than 90 degrees between them, returns a value
-    # greater than zero; in this case, that means the projection of
-    # the circle center is inside of the line segment
-    if np.dot(CB,AB)>0 and np.dot(CA,BA)>0:
-        # min_distance <-- triangle height
-        triagle_area = abs(np.cross(AB,(-1*CA))/2
-        min_distance = (2*triangle_area)/cartesian_distance(p1,p2,3) 
-    else:
-        #min_distance <-- the smallest side of the triangle
-        min_distance = min(distance_CB,distance_CA)
-
-    # max_distance <--the bigger side of the triangle
-    max_distance = max(distance_CB,distance_CA)
-
+    # horizontal line
+    if y1==y2 and x1!=x2:
+        a = 0
+        b = 1
+        c = -y1
         
-    if min_disntace<=radius and max_distance>=radius:
-        has_collided = True
+        #projection of C point
+        xp = xc
+        yp = y1
+        
+    # vertical line
+    elif x1==x2 and y1!=y2:
+        a = 1
+        b = 0
+        c = -x1
+
+        #projection of C point
+        xp = x1
+        yp = yc
+        
+    # sloping line
     else:
-        has_collided = False
+        m = (y2-y1)/(x2-x1)
+        a = m
+        b = -1
+        c = y1-m*x1
+        
+        # projection of C point
+        # equation #1: -1/m=(yp-yc)/(xp-xc)
+        # equation #2: m=(y2-yp)/(x2-xp)
+        const_1 = -xc-m*yc
+        const_2 = m*x2-y2
+        xp = (m*const_2-const_1)/(1+m**2)
+        yp = m*xp-const_2
+
+    # vertical distance from point C to AB line segment
+    vertical_distance = abs(a*xc+b*yc+c)/math.sqrt(a**2+b**2)
+
+    # distance from center point to A and B points
+    distance_CA = cartesian_distance(A,[xc,yc],3)
+    distance_CB = cartesian_distance(B,[xc,yc],3)
     
+    # check if projection of C point (xp,yp) belongs to 
+    # AB segment using dot product of vector AB and AC
+    # https://lucidar.me/en/mathematics/check-if-a-point-belongs-on-a-line-segment/
+    vect_AB = np.subtract([x2,y2],[x1,y1])
+    vect_AC = np.subtract([xp,yp],[x1,y1])
+    k_AC = np.dot(vect_AB,vect_AC)
+    k_AB = np.dot(vect_AB,vect_AB)
+    if 0<=k_AC<=k_AB:
+        is_segment_point = True
+    else:
+        is_segment_point = False
+    
+    
+    # free path condition
+    if vertical_distance>(radius+offset):
+        has_collided = False
+    elif vertical_distance<(radius+offset) and (not(is_segment_point)) and (min(distance_CA,distance_CB)>(radius+offset)):
+        has_collided = False
+    else:
+        has_collided = True
+
     return has_collided
+    
     
      
 

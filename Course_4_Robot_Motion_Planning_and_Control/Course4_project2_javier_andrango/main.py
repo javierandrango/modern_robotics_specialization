@@ -13,7 +13,7 @@ from RRTPlanner import *
 # - x,y: location of the node in the plane
 # - heuristic-cost-to-go: is an optimistic estimate of the path 
 obstacles_file = 'planning/obstacles.csv'  # x,y,diameter
-nodes_file = 'planning/nodes.csv'  # ID,x,y,heuristic-cost-to-go
+nodes_file = 'planning/nodes_first_run.csv'  # ID,x,y,heuristic-cost-to-go
 obstacles = np.array(csv_reader(obstacles_file))
 nodes = np.array(csv_reader(nodes_file))
 
@@ -31,7 +31,7 @@ id_node = nodes[0,0]
 
 # define goal node
 goal = nodes[1,1:3]
-goal_error = 0.025
+goal_error = 0.15
 goal_max_error = list(np.add(goal,goal_error))
 goal_min_error = list(np.subtract(goal,goal_error))
 
@@ -52,7 +52,7 @@ while(iteration<=samples_number):
 
         id_node+=1
         
-        # check if x_new is iqual o near to goal
+        # check if x_new is equal o near to goal
         if (goal_min_error[0]<=x_new[0]<=goal_max_error[0])and(goal_min_error[1]<=x_new[1]<=goal_max_error[1]):
     
             # delete rows without data ([math.inf]*3)
@@ -60,6 +60,8 @@ while(iteration<=samples_number):
 
             # end the loop
             print("SUCESS")
+            path_list = short_path(edges)
+            print("short path: ",path_list)
             RRT_plot(obstacles,search_tree, edges)
             break
         else:
@@ -67,7 +69,16 @@ while(iteration<=samples_number):
 
         iteration+=1
 
+# save csv files:
+# edges csv
+np.savetxt("planning/edges.csv",edges, delimiter=',', fmt='%i,%i,%.3f')
 
-#RRT_plot(obstacles,search_tree, edges)
+# nodes csv
+heuristic_cost_to_go =[]
+for node in search_tree:
+    heuristic_cost_to_go.append(cartesian_distance(node[1:],search_tree[-1,1:]))
+nodes_csv = np.insert(search_tree,3,heuristic_cost_to_go,axis=1)
+np.savetxt("planning/nodes.csv",nodes_csv, delimiter=',', fmt='%i,%.3f,%.3f,%.3f')
 
-
+# path csv
+np.savetxt("planning/path.csv",[path_list], delimiter=',', fmt='%i')

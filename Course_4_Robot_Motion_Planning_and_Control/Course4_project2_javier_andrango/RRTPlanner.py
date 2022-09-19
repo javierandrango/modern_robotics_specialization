@@ -222,9 +222,7 @@ def local_planner(x_nearest,x_samp,obstacles,x_samp_offset=0.01):
           interval
     Returns:
         - has_collided(bool):
-        - x_new(list):
-        
-
+        - x_new(list):   
     '''
     
     xs,ys = x_samp
@@ -274,8 +272,28 @@ def id_search(search_tree,search):
     return id_tree
 
     
-     
+def short_path(edges):
+    """
+    Args:
+        -edges(numpy.ndarray): [ID1 ID2 cartesian_distance]
+    Returns:
+        -path(list): free path list from initial ID to goal ID
+    """
+    path=[]
+    goal_id2 = edges[-1,1]
+    init_id1 = edges[0,0]
+    
+    while(goal_id2 != init_id1):
+        path.append(goal_id2)
+        index_id1 = np.where(edges[:,1]==goal_id2)[0][0]
+        goal_id2 = edges[index_id1,0]
+    
+    path.append(init_id1)
+    path.reverse()
+    return path
 
+    
+    
 
 
     

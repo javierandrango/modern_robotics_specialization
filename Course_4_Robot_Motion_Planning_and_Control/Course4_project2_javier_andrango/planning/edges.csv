@@ -1,6 +1,25 @@
-# edges.csv file for V-REP kilobot motion planning scene.
-# All lines beginning with a # are treated as a comment and ignored.
-# Each line below is of the form
-# ID1,ID2,cost
-# where ID1 and ID2 are the IDs of the nodes connected by the edge and
-# cost is the cost of traversing that edge (in either direction).
+1,2,0.997
+1,3,0.852
+2,4,0.251
+3,5,0.205
+2,6,0.058
+2,7,0.141
+3,8,0.340
+5,9,0.264
+9,10,0.111
+3,11,0.155
+9,12,0.262
+7,13,0.040
+9,14,0.139
+11,15,0.015
+12,16,0.280
+4,17,0.037
+8,18,0.268
+13,19,0.105
+16,20,0.071
+18,21,0.168
+2,22,0.070
+4,23,0.081
+21,24,0.052
+22,25,0.115
+7,26,0.362

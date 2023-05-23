@@ -240,7 +240,7 @@ def local_planner(x_nearest,x_samp,obstacles,x_samp_offset=0.01):
     xw,yw = x_new
     mid_point = [(xn+xw)/2,(yn+yw)/2]
     
-    # use the middle point of the segment of find the nearest obstacle
+    # use the middle point of the segment to find the nearest obstacle
     dis_point_obs_list = []
     index_obstacle = 0
     for obstacle in obstacles:
